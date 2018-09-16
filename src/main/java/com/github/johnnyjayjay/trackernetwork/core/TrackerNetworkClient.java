@@ -1,6 +1,5 @@
 package com.github.johnnyjayjay.trackernetwork.core;
 
-import com.github.johnnyjayjay.trackernetwork.fortnite.FortniteTracker;
 import okhttp3.OkHttpClient;
 
 /**
@@ -9,14 +8,19 @@ import okhttp3.OkHttpClient;
  */
 public class TrackerNetworkClient {
 
-    private OkHttpClient okHttpClient;
+    private final OkHttpClient okHttpClient;
+    private final String apiKey;
 
-    public TrackerNetworkClient() {
+    private final FortniteTracker fortniteTracker;
+
+    public TrackerNetworkClient(String apiKey) {
         this.okHttpClient = new OkHttpClient();
+        this.apiKey = apiKey;
+        this.fortniteTracker = new FortniteTracker(apiKey, okHttpClient);
     }
 
-    public FortniteTracker newFortniteTracker(String apiKey) {
-        return new FortniteTracker(apiKey, okHttpClient);
+    public FortniteTracker getFortniteTracker() {
+        return fortniteTracker;
     }
 
 

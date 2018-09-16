@@ -5,7 +5,7 @@ package com.github.johnnyjayjay.trackernetwork.fortnite.entities;
  *
  * @author Johnny_JayJay
  */
-public class Store implements FortniteEntity {
+public class Item {
 
 
 }

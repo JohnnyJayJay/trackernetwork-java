@@ -1,6 +1,9 @@
 package com.github.johnnyjayjay.trackernetwork.fortnite.entities;
 
+import com.github.johnnyjayjay.trackernetwork.fortnite.Platform;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 /**
  * https://www.github.com/JohnnyJayJay
@@ -8,13 +11,15 @@ import org.json.JSONObject;
  */
 public class User implements FortniteEntity {
 
-    private final String accountId, platform, handle;
+    private final String accountId, handle;
+    private final Platform platform;
+    private final Season season;
     private final int top5, top3, top6, top10, top12, top25, matchesPlayed, wins, kills;
     private final float winrate, kdRatio;
     private final Stats soloStats, duoStats, squadStats;
 
-    public User(String accountId, String platform, String handle, int top5, int top3, int top6, int top10, int top12, int top25, int matchesPlayed,
-                int wins, int kills, float winrate, float kdRatio, Stats soloStats, Stats duoStats, Stats squadStats, Stats lifeTimeStats) {
+    public User(String accountId, Platform platform, String handle, int top5, int top3, int top6, int top10, int top12, int top25, int matchesPlayed,
+                int wins, float winrate, int kills, float kdRatio, Stats soloStats, Stats duoStats, Stats squadStats, Season season) {
         this.accountId = accountId;
         this.platform = platform;
         this.handle = handle;
@@ -32,13 +37,14 @@ public class User implements FortniteEntity {
         this.soloStats = soloStats;
         this.duoStats = duoStats;
         this.squadStats = squadStats;
+        this.season = season;
     }
 
     public String getAccountId() {
         return accountId;
     }
 
-    public String getPlatform() {
+    public Platform getPlatform() {
         return platform;
     }
 
@@ -102,7 +108,11 @@ public class User implements FortniteEntity {
         return squadStats;
     }
 
-    public static class Stats {
+    public Season getSeason() {
+        return season;
+    }
+
+    public static class Stats implements Serializable {
         private final int top5, top3, top6, top10, top12, top25, matchesPlayed, wins, kills;
         private final float winrate, kdRatio;
 
@@ -164,7 +174,26 @@ public class User implements FortniteEntity {
             return kdRatio;
         }
 
+        @Override
+        public String toString() {
+            return "Stats{" +
+                    "top5=" + top5 +
+                    ", top3=" + top3 +
+                    ", top6=" + top6 +
+                    ", top10=" + top10 +
+                    ", top12=" + top12 +
+                    ", top25=" + top25 +
+                    ", matchesPlayed=" + matchesPlayed +
+                    ", wins=" + wins +
+                    ", kills=" + kills +
+                    ", winrate=" + winrate +
+                    ", kdRatio=" + kdRatio +
+                    '}';
+        }
+
         public static Stats parse(JSONObject object) {
+            if (object == null)
+                return null;
             return new Stats(getInt(object, "top3"), getInt(object, "top5"), getInt(object, "top6"),
                     getInt(object, "top10"), getInt(object, "top12"), getInt(object, "top25"), getInt(object, "matches"),
                     getInt(object, "top1"), getInt(object, "kills"), getFloat(object, "winRatio"), getFloat(object, "kd"));
@@ -180,4 +209,58 @@ public class User implements FortniteEntity {
 
     }
 
+    public static class Season implements Serializable {
+        private final Stats soloStats, duoStats, squadStats;
+
+        public Season(Stats soloStats, Stats duoStats, Stats squadStats) {
+            this.soloStats = soloStats;
+            this.duoStats = duoStats;
+            this.squadStats = squadStats;
+        }
+
+        public Stats getSoloStats() {
+            return soloStats;
+        }
+
+        public Stats getDuoStats() {
+            return duoStats;
+        }
+
+        public Stats getSquadStats() {
+            return squadStats;
+        }
+
+        @Override
+        public String toString() {
+            return "Season{" +
+                    "soloStats=" + soloStats +
+                    ", duoStats=" + duoStats +
+                    ", squadStats=" + squadStats +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "accountId='" + accountId + '\'' +
+                ", handle='" + handle + '\'' +
+                ", platform=" + platform.getName() +
+                ", season=" + season +
+                ", top5=" + top5 +
+                ", top3=" + top3 +
+                ", top6=" + top6 +
+                ", top10=" + top10 +
+                ", top12=" + top12 +
+                ", top25=" + top25 +
+                ", matchesPlayed=" + matchesPlayed +
+                ", wins=" + wins +
+                ", kills=" + kills +
+                ", winrate=" + winrate +
+                ", kdRatio=" + kdRatio +
+                ", soloStats=" + soloStats +
+                ", duoStats=" + duoStats +
+                ", squadStats=" + squadStats +
+                '}';
+    }
 }
