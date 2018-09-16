@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * https://www.github.com/JohnnyJayJay
  * @author Johnny_JayJay
  */
-public class Matches implements FortniteEntity {
+public class MatchBundle implements FortniteEntity {
 
     private final String accountId;
     private final long id;
@@ -16,8 +16,8 @@ public class Matches implements FortniteEntity {
     private final int kills, matches, wins, top10, top12, top25, top3, top5, top6;
     private final GameMode mode;
 
-    public Matches(String accountId, long id, LocalDateTime dateTime, int kills, int matches, int wins, int top10,
-                   int top12, int top25, int top3, int top5, int top6, GameMode mode) {
+    public MatchBundle(String accountId, long id, LocalDateTime dateTime, int kills, int matches, int wins, int top10,
+                       int top12, int top25, int top3, int top5, int top6, GameMode mode) {
         this.accountId = accountId;
         this.id = id;
         this.dateTime = dateTime;
@@ -37,7 +37,7 @@ public class Matches implements FortniteEntity {
         return id;
     }
 
-    public LocalDateTime getDateTime() {
+    public LocalDateTime getDateCollected() {
         return dateTime;
     }
 
@@ -83,5 +83,24 @@ public class Matches implements FortniteEntity {
 
     public String getAccountId() {
         return accountId;
+    }
+
+    @Override
+    public String toString() {
+        return "MatchBundle{" +
+                "accountId='" + accountId + '\'' +
+                ", id=" + id +
+                ", dateTime=" + dateTime +
+                ", kills=" + kills +
+                ", matches=" + matches +
+                ", wins=" + wins +
+                ", top10=" + top10 +
+                ", top12=" + top12 +
+                ", top25=" + top25 +
+                ", top3=" + top3 +
+                ", top5=" + top5 +
+                ", top6=" + top6 +
+                ", mode=" + mode +
+                '}';
     }
 }

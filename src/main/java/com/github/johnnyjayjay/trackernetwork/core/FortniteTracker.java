@@ -30,7 +30,7 @@ public class FortniteTracker extends Tracker {
     private final String storeEndpoint = "https://api.fortnitetracker.com/v1/store";
     private final String challengeEndpoint = "https://api.fortnitetracker.com/v1/challenges";
 
-    public FortniteTracker(String apiKey, OkHttpClient okHttpClient) {
+    protected FortniteTracker(String apiKey, OkHttpClient okHttpClient) {
         super(apiKey, okHttpClient);
     }
 
