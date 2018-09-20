@@ -2,9 +2,23 @@ package com.github.johnnyjayjay.trackernetwork.fortnite;
 
 import java.io.Serializable;
 
+/**
+ * Represents a Fortnite BR Gamemode
+ */
 public enum GameMode implements Serializable {
 
-    SOLO("p2"), DUO("p10"), SQUAD("p9");
+    /**
+     * The solo BR mode
+     */
+    SOLO("p2"),
+    /**
+     * The duo BR mode
+     */
+    DUO("p10"),
+    /**
+     * The squad BR mode
+     */
+    SQUAD("p9");
 
     private final String playlistIdentifier;
 
@@ -12,10 +26,14 @@ public enum GameMode implements Serializable {
         this.playlistIdentifier = playlistIdentifier;
     }
 
+    /**
+     * @return The identifier used by this API to describe game modes.
+     */
     public String getPlaylistIdentifier() {
         return playlistIdentifier;
     }
 
+    
     public static GameMode ofIdentifier(String playlistIdentifier) {
         GameMode ret = null;
         switch (playlistIdentifier) {

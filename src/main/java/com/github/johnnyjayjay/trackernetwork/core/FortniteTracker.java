@@ -7,9 +7,9 @@ import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Item;
 import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Item.Category;
 import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Item.Rarity;
 import com.github.johnnyjayjay.trackernetwork.fortnite.entities.MatchBundle;
-import com.github.johnnyjayjay.trackernetwork.fortnite.entities.User;
-import com.github.johnnyjayjay.trackernetwork.fortnite.entities.User.Season;
-import com.github.johnnyjayjay.trackernetwork.fortnite.entities.User.Stats;
+import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Player;
+import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Player.Season;
+import com.github.johnnyjayjay.trackernetwork.fortnite.entities.Player.Stats;
 import okhttp3.OkHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,19 +34,19 @@ public class FortniteTracker extends Tracker {
         super(apiKey, okHttpClient);
     }
 
-    public void getUser(Platform platform, String userName, Consumer<User> success, Consumer<Exception> failure) {
+    public void getPlayer(Platform platform, String userName, Consumer<Player> success, Consumer<Exception> failure) {
         this.request(String.format(statsEndpoint, platform.getName(), userName), new JSONObjectCallback(failure, (object) -> {
             JSONArray array = object.getJSONArray("lifeTimeStats");
             JSONObject stats = object.getJSONObject("stats");
 
-            User user = new User(object.getString("accountId"), platform, userName, getIntFromArray(array, 0), getIntFromArray(array, 1),
+            Player player = new Player(object.getString("accountId"), platform, userName, getIntFromArray(array, 0), getIntFromArray(array, 1),
                     getIntFromArray(array, 2), getIntFromArray(array, 3), getIntFromArray(array, 4), getIntFromArray(array, 5),
                     getIntFromArray(array, 7), getIntFromArray(array, 8),
                     Float.parseFloat(array.getJSONObject(9).getString("value").replace("%", "")) / 100F, getIntFromArray(array, 10),
                     array.getJSONObject(11).optFloat("value"), Stats.parse(stats.optJSONObject("p2")), Stats.parse(stats.optJSONObject("p10")),
                     Stats.parse(stats.optJSONObject("p9")), new Season(Stats.parse(stats.optJSONObject("curr_p2")), Stats.parse(stats.optJSONObject("curr_p10")),
                     Stats.parse(stats.optJSONObject("curr_p9"))));
-            success.accept(user);
+            success.accept(player);
         }));
     }
 
@@ -92,8 +92,8 @@ public class FortniteTracker extends Tracker {
         }));
     }
 
-    public void getUser(Platform platform, String userName, Consumer<User> success) {
-        this.getUser(platform, userName, success, null);
+    public void getPlayer(Platform platform, String userName, Consumer<Player> success) {
+        this.getPlayer(platform, userName, success, null);
     }
 
     public void getMatchHistory(String accountId, Consumer<List<MatchBundle>> success) {
@@ -101,11 +101,11 @@ public class FortniteTracker extends Tracker {
     }
 
     public void getMatchHistory(Platform platform, String userName, Consumer<List<MatchBundle>> success, Consumer<Exception> failure) {
-        this.getUser(platform, userName, (user) -> this.getMatchHistory(user.getAccountId(), success, failure), failure);
+        this.getPlayer(platform, userName, (player) -> this.getMatchHistory(player.getAccountId(), success, failure), failure);
     }
 
     public void getMatchHistory(Platform platform, String userName, Consumer<List<MatchBundle>> success) {
-        this.getUser(platform, userName, (user) -> this.getMatchHistory(user.getAccountId(), success, null), null);
+        this.getPlayer(platform, userName, (player) -> this.getMatchHistory(player.getAccountId(), success, null), null);
     }
 
     public void getStore(Consumer<List<Item>> success) {
@@ -116,7 +116,7 @@ public class FortniteTracker extends Tracker {
         this.getChallenges(success, null);
     }
 
-   /* public User getUserBlocking(Platform platform, String userName, Consumer<Exception> failure) {
+   /* public Player getUserBlocking(Platform platform, String userName, Consumer<Exception> failure) {
         return this.execute(String.format(statsEndpoint, platform.getName(), userName), (body, user) -> {
 
         }, failure);

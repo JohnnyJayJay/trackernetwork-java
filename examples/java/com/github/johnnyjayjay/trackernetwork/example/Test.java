@@ -19,7 +19,7 @@ public class Test {
     public static void main(String[] args) {
         System.out.println("Account");
         String userName = scanner.nextLine();
-        tracker.getUser(Platform.PC, userName, (user) -> {
+        tracker.getPlayer(Platform.PC, userName, (user) -> {
             System.out.println("Account-ID: " + user.getAccountId() + "\tMatches played: " + user.getMatchesPlayed());
             main(null);
         });
