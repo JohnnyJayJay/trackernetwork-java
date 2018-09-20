@@ -116,6 +116,12 @@ public class FortniteTracker extends Tracker {
         this.getChallenges(success, null);
     }
 
+   /* public User getUserBlocking(Platform platform, String userName, Consumer<Exception> failure) {
+        return this.execute(String.format(statsEndpoint, platform.getName(), userName), (body, user) -> {
+
+        }, failure);
+    }*/
+
     private String getStringFromArray(JSONArray array, int index) {
         return array.getJSONObject(index).optString("value");
     }

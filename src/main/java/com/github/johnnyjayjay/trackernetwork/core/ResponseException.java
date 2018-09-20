@@ -13,6 +13,11 @@ public class ResponseException extends RuntimeException {
         this.code = code;
     }
 
+    public ResponseException(String message, Throwable cause) {
+        super(message, cause);
+        this.code = 200;
+    }
+
     public ResponseException(String message) {
         this(message, 200);
     }

@@ -25,14 +25,16 @@ public abstract class Tracker {
         okHttpClient.newCall(request).enqueue(callback);
     }
 
-    protected <T> T execute(String endpoint, Function<ResponseBody, T> function, Consumer<Exception> failure) {
+    /*protected <T, C> T execute(String endpoint, AbstractCallback<C> provider, Function<C, T> function, Consumer<Exception> failure) {
         Request request = new Request.Builder().header("TRN-Api-Key", apiKey).get().url(endpoint).build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-            // TODO: 17.09.2018  
-        } catch (IOException e) {
-            e.printStackTrace();
+            return function.apply(provider.provide(response.body()));
+        } catch (Exception e) {
+            if (failure != null)
+                failure.accept(e);
         }
+        return null;
 
-    }
+    }*/
 
 }

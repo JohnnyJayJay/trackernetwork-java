@@ -25,10 +25,11 @@ public abstract class AbstractCallback<T> implements Callback {
 
     @Override
     public void onFailure(Call call, IOException e) {
+        ResponseException exception = new ResponseException("Call failed", e);
         if (failure != null)
-            failure.accept(e);
+            failure.accept(exception);
         else
-            e.printStackTrace();
+            throw exception;
     }
 
     @Override
@@ -37,15 +38,16 @@ public abstract class AbstractCallback<T> implements Callback {
             try (ResponseBody body = response.body()) {
                 success.accept(provide(body));
             } catch (Exception e) {
+                ResponseException exception = new ResponseException("Accepting response failed", e);
                 if (failure != null)
-                    failure.accept(e);
+                    failure.accept(exception);
                 else
-                    e.printStackTrace();
+                    throw exception;
             }
         } else if (failure != null) {
             failure.accept(new ResponseException("HTTP Request failed: " + response.message(), response.code()));
         } else {
-            System.out.println("Response failed. " + response.message());
+            throw new ResponseException("HTTP Request failed: " + response.message(), response.code());
         }
     }
 
