@@ -31,7 +31,7 @@ public abstract class Tracker {
      */
     protected String requestSync(String endpoint) {
         Request request = new Request.Builder().header("TRN-Api-Key", apiKey).get().url(endpoint).build();
-        try (var response = okHttpClient.newCall(request).execute()) {
+        try (Response response = okHttpClient.newCall(request).execute()) {
             return response.body().string();
         } catch (IOException e) {
             throw new ResponseException("Synchronous request failed", e);
@@ -44,8 +44,8 @@ public abstract class Tracker {
      */
     protected <T> T requestSync(String endpoint, Function<String, T> function) {
         Request request = new Request.Builder().header("TRN-Api-Key", apiKey).get().url(endpoint).build();
-        try (var response = okHttpClient.newCall(request).execute()) {
-            var body = response.body().string();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            String body = response.body().string();
             return function.apply(body);
         } catch (IOException e) {
             throw new ResponseException("Synchronous request failed", e);
